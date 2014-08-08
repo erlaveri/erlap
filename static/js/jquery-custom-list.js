@@ -23,6 +23,7 @@ jQuery.fn.customList = function (defaults) {
 
     var methods = {
         Init: function (element) {
+            methods.SetOffset(element, 0);
             for (var k in options.defaults) {
                 element.data(options.defaults[k], element.data(options.defaults[k]) || options.defaults[k]);
             }
@@ -40,9 +41,9 @@ jQuery.fn.customList = function (defaults) {
             return url;
         },
         ResetListInfo: function (element) {
-            element.data('offset', 0);
+            methods.SetOffset(element, 0);
+            element.data('quantity', 0);
         },
-
         RequestItems: function (element, data) {
             data = data || {};
             var filters = methods.CreateFilters(element),
@@ -55,13 +56,14 @@ jQuery.fn.customList = function (defaults) {
                     element.trigger('onSuccess.erlCustomList', result);
                     element.data('quantity', result.quantity);
                     if ('list' in result) {
-                        if (!element.data('offset')) {
+                        var offset = methods.GetOffset(element);
+                        if (!offset) {
                             methods.FillList(element, {list: result.list});
                         } else {
                             methods.AppendList(element, {list: result.list});
                         }
-                        element.data('offset', element.data('offset') + element.data('per-page'));
-                        if (result.quantity <= element.data('offset')) {
+                        offset = methods.SetOffset(element, offset + methods.GetItemsPerPage(element));
+                        if (result.quantity <= offset) {
                             element.addClass(options.listEndedCls);
                         }
                         else {
@@ -80,7 +82,7 @@ jQuery.fn.customList = function (defaults) {
                 jQuery.extend(true, params, data.addParams);
             }
             jQuery
-                .post(url, JSON.stringify(params))
+                .post(url, {params: JSON.stringify(params)})
                 .done(onSuccess);
         },
         makeSearch: function (element, data) {
@@ -88,21 +90,21 @@ jQuery.fn.customList = function (defaults) {
             data = jQuery.extend(true, data, {
                 addParams: {
                     offset: methods.GetOffset(element, null),
-                    limit: methods.GetItemsPerPage(element, null)}
+                    quantity: methods.GetItemsPerPage(element, null)}
             });
             methods.RequestItems(element, data);
         },
         InitEvents: function (element) {
             var onClick = function (event, data) {
-                event.stopPropagation();
                 methods.makeSearch(element, data);
             };
             element.on('click', options.elements.searchAction, onClick);
             element.bind('makeOrder.erlCustomList', onClick);
             element.bind('makeSearch.erlCustomList', onClick);
             var onNextClick = function (event, data) {
-                event.stopPropagation();
-                methods.GetNext(element, {});
+                if(!element.hasClass(options.listEndedCls)){
+                    methods.GetNext(element, {});
+                }
             };
             element.on('click', options.elements.nextAction, onNextClick);
             element.bind('getNext.erlCustomList', onNextClick);
@@ -196,14 +198,18 @@ jQuery.fn.customList = function (defaults) {
         },
         GetNext: function (element, data) {
             var itemsPerPage = methods.GetItemsPerPage(element, null),
-                offset = element.data('offset');
-            methods.RequestItems(element, {addParams: {offset: offset, limit: offset + itemsPerPage}});
+                offset = methods.GetOffset(element);
+            methods.RequestItems(element, {addParams: {offset: offset, quantity: itemsPerPage}});  //limit - items per page
         },
         GetItemsPerPage: function (element) {
             return element.data('per-page');
         },
         GetOffset: function (element) {
             return element.data('offset');
+        },
+        SetOffset: function (element, offset) {
+            element.data('offset', offset);
+            return offset;
         },
         FillList: function (element, data) {
             var list = jQuery(data.list).hide();

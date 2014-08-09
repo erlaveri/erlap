@@ -23,7 +23,6 @@ jQuery.fn.customList = function (defaults) {
 
     var methods = {
         Init: function (element) {
-            methods.SetOffset(element, 0);
             for (var k in options.defaults) {
                 element.data(options.defaults[k], element.data(options.defaults[k]) || options.defaults[k]);
             }
@@ -102,7 +101,7 @@ jQuery.fn.customList = function (defaults) {
             element.bind('makeOrder.erlCustomList', onClick);
             element.bind('makeSearch.erlCustomList', onClick);
             var onNextClick = function (event, data) {
-                if(!element.hasClass(options.listEndedCls)){
+                if (!element.hasClass(options.listEndedCls)) {
                     methods.GetNext(element, {});
                 }
             };
@@ -114,40 +113,55 @@ jQuery.fn.customList = function (defaults) {
                 localFilter = {},
                 filterName, val,
                 type = item.data('type');
-            if (type == 'select') {
-                if (item.prop('type') == 'select-one') {
-                    val = item.find('option').filter(':selected').val();
+            switch (type) {
+                case 'select':
+                    if (item.prop('type') == 'select-one') {
+                        val = item.find('option').filter(':selected').val();
+                        filterName = item.attr('name');
+                        if (val) {
+                            localFilter[filterName] = val;
+                        }
+                    }
+                    break;
+                case 'select-data':
+                    if (item.prop('type') == 'select-one') {
+                        val = item.find('option').filter(':selected').val();
+                        filterName = item.data('name');
+                        if (val) {
+                            localFilter[filterName] = val;
+                        }
+                    }
+                    break;
+                case 'input':
                     filterName = item.attr('name');
+                    val = item.val();
                     if (val) {
                         localFilter[filterName] = val;
                     }
-                }
-            } else if (type == 'select-data') {
-                if (item.prop('type') == 'select-one') {
-                    val = item.find('option').filter(':selected').val();
+                    break;
+                case 'data':
                     filterName = item.data('name');
+                    val = item.data('value');
                     if (val) {
                         localFilter[filterName] = val;
                     }
-                }
-            } else if (type == 'input') {
-                filterName = item.attr('name');
-                val = item.val();
-                if (val) {
-                    localFilter[filterName] = val;
-                }
-            } else if (type == 'data') {
-                filterName = item.data('name');
-                val = item.data('value');
-                if (val) {
-                    localFilter[filterName] = val;
-                }
-            } else if (type == 'data-text') {
-                filterName = item.data('name');
-                val = item.text();
-                if (val) {
-                    localFilter[filterName] = val;
-                }
+                    break;
+                case 'data-text':
+                    filterName = item.data('name');
+                    val = item.text();
+                    if (val) {
+                        localFilter[filterName] = val;
+                    }
+                    break;
+                case 'checkboxes':
+                    filterName = item.data('name');
+                    var arr = [];
+                    item.find(':checkbox:checked').each(function(){
+                        arr.push(this.value);
+                    });
+                    if (arr.length){
+                        localFilter[filterName] = arr;
+                    }
             }
             return {filter: localFilter, name: filterName};
         },

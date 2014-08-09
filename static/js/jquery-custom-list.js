@@ -27,6 +27,9 @@ jQuery.fn.customList = function (defaults) {
                 element.data(options.defaults[k], element.data(options.defaults[k]) || options.defaults[k]);
             }
             methods.InitEvents(element);
+            if(methods.GetOffset(element) == element.data('quantity')){
+                element.addClass(options.listEndedCls);
+            }
         },
 
         GetReqUrl: function (element) {
@@ -89,7 +92,7 @@ jQuery.fn.customList = function (defaults) {
             data = jQuery.extend(true, data, {
                 addParams: {
                     offset: methods.GetOffset(element, null),
-                    quantity: methods.GetItemsPerPage(element, null)}
+                    per_page: methods.GetItemsPerPage(element, null)}
             });
             methods.RequestItems(element, data);
         },
@@ -213,7 +216,7 @@ jQuery.fn.customList = function (defaults) {
         GetNext: function (element, data) {
             var itemsPerPage = methods.GetItemsPerPage(element, null),
                 offset = methods.GetOffset(element);
-            methods.RequestItems(element, {addParams: {offset: offset, quantity: itemsPerPage}});  //limit - items per page
+            methods.RequestItems(element, {addParams: {offset: offset, per_page: itemsPerPage}});  //limit - items per page
         },
         GetItemsPerPage: function (element) {
             return element.data('per-page');

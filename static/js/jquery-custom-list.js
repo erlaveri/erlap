@@ -174,7 +174,6 @@ jQuery.fn.customList = function (defaults) {
                 jQuery.extend(true, filter, (methods.MakeFilter({item: jQuery(item)})).filter);
             };
             element.find(options.filters).filter('.activeEl').each(onEach);
-            console.log(filter);
             return filter;
         },
         MakeOrder: function (data) {

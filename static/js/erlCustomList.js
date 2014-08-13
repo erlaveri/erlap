@@ -1,7 +1,7 @@
 // Use jQuery('.erlHider').erlHider(defaultSettings)
 jQuery.fn.erlCustomList = function (options) {
     var curThis = this;
-//test string
+//test
     var defaultOptions = {
         elements: {
             methodModels: '.customList__method',

@@ -1,0 +1,34 @@
+/*Sticky Footer START*/
+html,body { height: 100%; }
+body {display: table;width: 100%;}
+.page-row {display: table-row;height: 1px;}
+.page-row-expanded { height: 100%; }
+/*
+<header class="page-row">
+	<h1>Site Title</h1>
+</header>
+
+<main class="page-row page-row-expanded">
+	<p>Page content goes here.</p>
+</main>
+
+<footer class="page-row">
+	<p>Copyright, blah blah blah.</p>
+</footer>
+*/
+
+/*Sticky Footer END*/
+
+
+/*clearfix START*/
+.cf:before,.cf:after {content: " "; display: table;}
+.cf:after {clear: both;}
+/**
+ * For IE 6/7 only
+ * Include this rule to trigger hasLayout and contain floats.
+ */
+/*.cf {*/
+    /**zoom: 1;*/
+/*}*/
+
+/*clearfix END*/

@@ -18,8 +18,3 @@ class PdbNode(Node):
 @register.tag
 def pdb_debug(parser, token):
     return PdbNode()
-
-
-@register.filter
-def js_errors(value, arg):
-    return value.field.error_messages

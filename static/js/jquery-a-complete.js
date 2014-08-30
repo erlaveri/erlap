@@ -16,7 +16,7 @@ jQuery.fn.aComplete = function (defaults) {
             input.before(inputHidden);
         }
 
-        inputHidden.val('');
+        inputHidden.val('').trigger('change');
         input.data(input.data('id-key'), '');
 
         if (q.length > 1) {
@@ -103,7 +103,7 @@ jQuery.fn.aComplete = function (defaults) {
             inputHidden = jQuery('<input type="hidden" name="' + input.data('input') + '" />');
             input.before(inputHidden);
         }
-        inputHidden.val(choice.data(itmIdKey));
+        inputHidden.val(choice.data(itmIdKey)).trigger('change');
 
     };
     element.on('click', '.a-c-holder>div', onChoiceItemClick);

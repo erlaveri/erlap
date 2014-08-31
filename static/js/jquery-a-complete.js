@@ -16,7 +16,7 @@ jQuery.fn.aComplete = function (defaults) {
             input.before(inputHidden);
         }
 
-        inputHidden.val('').trigger('change');
+        inputHidden.val('');
         input.data(input.data('id-key'), '');
 
         if (q.length > 1) {

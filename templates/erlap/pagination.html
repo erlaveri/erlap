@@ -1,0 +1,9 @@
+<input name="page" value="{{ cur }}" type="hidden"/>
+{% for page in pages %}
+    {% if page %}
+        <a class="{% if cur == page %}selected{% endif %}"
+           href="?page={{ page }}{{ query_vars }}">{{ page }}</a>
+    {% else %}
+      <span>..</span>
+    {% endif %}
+{% endfor %}

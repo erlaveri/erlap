@@ -21,6 +21,13 @@ def pdb_debug(parser, token):
     return PdbNode()
 
 
+@register.simple_tag
+def active(request, pattern):
+    if request.path.startswith(pattern):
+        return 'active'
+    return ''
+
+
 @register.inclusion_tag('erlap/pagination.html', takes_context=True)
 def erl_pagination(context, page):
     paginator = page.paginator

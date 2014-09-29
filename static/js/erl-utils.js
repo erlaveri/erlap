@@ -1,3 +1,11 @@
+if (jQuery) {
+    jQuery.expr[":"].Contains = jQuery.expr.createPseudo(function (arg) {
+        return function (elem) {
+            return jQuery(elem).text().toUpperCase().indexOf(arg.toUpperCase()) >= 0;
+        };
+    });
+}
+
 var erljs = {};
 
 erljs.guid = function () {
@@ -21,6 +29,16 @@ erljs.uriToObject = function (search) {
         function (key, value) {
             return key === "" ? value : decodeURIComponent(value)
         }) : {}
+};
+
+erljs.QueryStringToJSON = function (query) {
+    query = query || window.location.search.slice(1);
+    var pairs = query.split('&'), result = {};
+    pairs.forEach(function (pair) {
+        pair = pair.split('=');
+        result[pair[0]] = decodeURIComponent(pair[1] || '');
+    });
+    return JSON.parse(JSON.stringify(result));
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
 erljs.shuffle = {
@@ -143,3 +161,14 @@ erljs.range = function (start, stop, step) {
     }
     return result;
 };
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
+
+
+
+
+
+
+
+
+
+self.erljs = erljs;

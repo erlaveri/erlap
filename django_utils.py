@@ -6,7 +6,7 @@ from django.utils.translation import ugettext_lazy as _
 
 
 def get_from_choices(choices, f_name):
-    return [i for i in choices if i[1] == 'xuxa'][0][0]
+    return [i for i in choices if i[0] == f_name][0]
 
 
 class ContentTypeRestrictedFileField(FileField):

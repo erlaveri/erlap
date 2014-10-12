@@ -20,3 +20,7 @@ def token_uuid(ver=4):
 
 def token_os(n=32):
     return os.urandom(n)
+
+
+decorator_with_arguments = lambda decorator: lambda * \
+    args, **kwargs: lambda func: decorator(func, *args, **kwargs)

@@ -41,10 +41,9 @@ class ContentTypeRestrictedFileField(FileField):
             if content_type in self.content_types:
                 if file._size > self.max_upload_size:
                     raise forms.ValidationError(_(
-                        u'Файл не должен быть больше %s. '
-                        u'Текущий размер %s') % (
-                                                    filesizeformat(self.max_upload_size),
-                                                    filesizeformat(file._size)))
+                        u'Файл не должен быть больше %(max_size)s. '
+                        u'Текущий размер %(cur_size)s') % {'max_size': filesizeformat(self.max_upload_size),
+                                                           'cur_size': filesizeformat(file._size)})
             else:
                 raise forms.ValidationError(_(
                     u'Расширение файла не поддерживается.'))

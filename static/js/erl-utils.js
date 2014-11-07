@@ -106,6 +106,17 @@ erljs.getOriginalOfImg = function (img_element) {
     }
 };
 ////////////////////////////////////////////////////////////////////////////////////////////////////////////
+// makeClass - By John Resig (MIT Licensed)
+erljs.makeClass = function () {
+    return function (args) {
+        if (this instanceof arguments.callee) {
+            if (typeof this.init == "function")
+                this.init.apply(this, args.callee ? args : arguments);
+        } else
+            return new arguments.callee(arguments);
+    };
+};
+////////////////////////////////////////////////////////////////////////////////////////////////////////////
 erljs.csrf = {
     csrfSafeMethod: function (method) {
         // these HTTP methods do not require CSRF protection

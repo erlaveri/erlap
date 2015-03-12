@@ -172,6 +172,16 @@ erljs.range = function (start, stop, step) {
     return result;
 };
 ///////////////////////////////////////////////////////////////////////////////////////////////////////////
+erljs.formatString = function (format) {
+    var args = Array.prototype.slice.call(arguments, 1);
+    return format.replace(/{(\d+)}/g, function (match, number) {
+        return typeof args[number] != 'undefined'
+            ? args[number]
+            : match
+            ;
+    });
+}
+///////////////////////////////////////////////////////////////////////////////////////////////////////////
 erljs.style = {
 //http://stackoverflow.com/questions/754607/can-jquery-get-all-css-styles-associated-with-an-element
 //Pass a jQuery object into css() and it will return an object, which you can then plug back into jQuery's $().css(), ex:

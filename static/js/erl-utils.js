@@ -41,6 +41,33 @@ erljs.QueryStringToJSON = function (query) {
     return JSON.parse(JSON.stringify(result));
 };
 
+erljs.uriToObjectNormal = function (data) {
+    var splits = decodeURIComponent(data).split('&'),
+        i = 0,
+        key = null,
+        split = null,
+        value = null,
+        splitParts = null;
+
+    var kv = {};
+    while (split = splits[i++]) {
+        splitParts = split.split('=');
+        key = splitParts[0] || '';
+        value = (splitParts[1] || '').replace(/\+/g, ' ');
+
+        if (key != '') {
+            if (key in kv) {
+                if ($.type(kv[key]) !== 'array')
+                    kv[key] = [kv[key]];
+
+                kv[key].push(value);
+            } else
+                kv[key] = value;
+        }
+    }
+    return kv;
+};
+
 erljs.serialize = function(obj, prefix) {
   var str = [];
   for(var p in obj) {

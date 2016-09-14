@@ -1,0 +1,38 @@
+{% load au_pagination from core_tags %}
+{% au_pagination as lol %}
+{% if object_list %}
+    <div class="nav">
+        <div class="show-amount">
+            <form>
+                <label>Выводить по</label>
+                <select name="paginate_by" class="no-transform">
+                    <option value="10">10</option>
+                    <option value="50">50</option>
+                    <option value="100">100</option>
+                </select>
+            </form>
+        </div>
+        <div class="c_pagination">
+
+            {% if page_obj.has_previous %}
+                <a href="?page={{ page_obj.previous_page_number }}{{ au_p_query_vars }}" class="prev"></a>
+            {% else %}
+                <a href="#" class="prev disabled"></a>
+            {% endif %}
+
+            {% for page in au_p_pages %}
+                {% if page %}
+                    <a class="{% if au_p_cur == page %}active{% endif %}" href="?page={{ page }}{{ au_p_query_vars }}">{{ page }}</a>
+                {% else %}
+                    <span class="space">..</span>
+                {% endif %}
+            {% endfor %}
+
+            {% if page_obj.has_next %}
+                <a class="next" href="?page={{ page_obj.next_page_number }}{{ au_p_query_vars }}"></a>
+            {% else %}
+                <a class="next disabled" href="#"></a>
+            {% endif %}
+        </div>
+    </div>
+{% endif %}
